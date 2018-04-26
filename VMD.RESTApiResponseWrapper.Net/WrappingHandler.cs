@@ -6,6 +6,11 @@ using System.Web.Http;
 using VMD.RESTApiResponseWrapper.Net.Wrappers;
 using VMD.RESTApiResponseWrapper.Net.Extensions;
 using VMD.RESTApiResponseWrapper.Net.Enums;
+using System.Dynamic;
+using System.Collections.Generic;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+using System;
 
 namespace VMD.RESTApiResponseWrapper.Net
 {
@@ -20,7 +25,8 @@ namespace VMD.RESTApiResponseWrapper.Net
 
         private static HttpResponseMessage BuildApiResponse(HttpRequestMessage request, HttpResponseMessage response)
         {
-            object content = null;
+  
+            dynamic content = null;
             object data = null;
             string errorMessage = null;
             ApiError apiError = null;
@@ -44,21 +50,35 @@ namespace VMD.RESTApiResponseWrapper.Net
                     {
                         errorMessage = error.Message;
 
-                        #if DEBUG
+#if DEBUG
                             errorMessage = string.Concat(errorMessage, error.ExceptionMessage, error.StackTrace);
-                        #endif
+#endif
 
                         apiError = new ApiError(errorMessage);
                     }
-        
-                    data = new APIResponse((int)code,ResponseMessageEnum.Failure.GetDescription(), null, apiError);
+
+                    data = new APIResponse((int)code, ResponseMessageEnum.Failure.GetDescription(), null, apiError);
 
                 }
                 else
                     data = content;
             }
             else
-                data = new APIResponse(code, ResponseMessageEnum.Success.GetDescription(), content);
+            {
+                if (response.TryGetContentValue(out content))
+                {
+                    Type type;
+                    type = content?.GetType();
+
+                    if (type.Name.Equals("APIResponse"))
+                    {
+                        response.StatusCode = Enum.Parse(typeof(HttpStatusCode), content.StatusCode.ToString());
+                        data = content;
+                    }
+                    else
+                        data = new APIResponse(code, ResponseMessageEnum.Success.GetDescription(), content);    
+                }
+            }
 
             var newResponse = request.CreateResponse(response.StatusCode, data);        
 
@@ -69,5 +89,6 @@ namespace VMD.RESTApiResponseWrapper.Net
 
             return newResponse;
         }
+
     }
 }

@@ -11,13 +11,13 @@ namespace VMD.RESTApiResponseWrapper.Net.Enums
     {
         [Description("Request successful.")]
         Success,
-        [Description("Request responded with error.")]
+        [Description("Request responded with exceptions.")]
         Failure,
-        [Description("Information.")]
+        [Description("Request denied.")]
         Information,
-        [Description("Warning.")]
+        [Description("Request responded with validation error(s).")]
         Warning,
-        [Description("")]
+        [Description("Unable to process the request.")]
         General
     }
 
