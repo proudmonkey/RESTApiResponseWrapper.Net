@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 namespace VMD.RESTApiResponseWrapper.Net.Wrappers
 {
     [DataContract]
+    [KnownTypeAttribute(typeof(APIResponse))]
     public class APIResponse
     {
         [DataMember]

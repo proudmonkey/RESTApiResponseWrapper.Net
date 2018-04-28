@@ -18,9 +18,15 @@ namespace VMD.RESTApiResponseWrapper.Net
     {
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var response = await base.SendAsync(request, cancellationToken);
-
-            return BuildApiResponse(request, response);
+            if (IsSwagger(request))
+            {
+                return await base.SendAsync(request, cancellationToken);
+            }
+            else
+            {
+                var response = await base.SendAsync(request, cancellationToken);
+                return BuildApiResponse(request, response);
+            }
         }
 
         private static HttpResponseMessage BuildApiResponse(HttpRequestMessage request, HttpResponseMessage response)
@@ -75,8 +81,15 @@ namespace VMD.RESTApiResponseWrapper.Net
                         response.StatusCode = Enum.Parse(typeof(HttpStatusCode), content.StatusCode.ToString());
                         data = content;
                     }
+                    else if (type.Name.Equals("SwaggerDocument"))
+                        data = content;
                     else
-                        data = new APIResponse(code, ResponseMessageEnum.Success.GetDescription(), content);    
+                        data = new APIResponse(code, ResponseMessageEnum.Success.GetDescription(), content);
+                }
+                else
+                {
+                    if (response.IsSuccessStatusCode)
+                        data = new APIResponse((int)response.StatusCode, ResponseMessageEnum.Success.GetDescription());
                 }
             }
 
@@ -90,5 +103,9 @@ namespace VMD.RESTApiResponseWrapper.Net
             return newResponse;
         }
 
+        private bool IsSwagger(HttpRequestMessage request)
+        {
+            return request.RequestUri.PathAndQuery.StartsWith("/swagger");
+        }
     }
 }
