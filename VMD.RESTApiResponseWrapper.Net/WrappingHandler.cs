@@ -6,10 +6,6 @@ using System.Web.Http;
 using VMD.RESTApiResponseWrapper.Net.Wrappers;
 using VMD.RESTApiResponseWrapper.Net.Extensions;
 using VMD.RESTApiResponseWrapper.Net.Enums;
-using System.Dynamic;
-using System.Collections.Generic;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
 using System;
 
 namespace VMD.RESTApiResponseWrapper.Net

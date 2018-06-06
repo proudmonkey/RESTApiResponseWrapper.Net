@@ -52,7 +52,7 @@ namespace VMD.RESTApiResponseWrapper.Net.Filters
                 // handle logging here
             }
 
-            apiResponse = new APIResponse(code, ResponseMessageEnum.Failure.GetDescription(), null, apiError);
+            apiResponse = new APIResponse(code, ResponseMessageEnum.Exception.GetDescription(), null, apiError);
 
             // always return a JSON result
             HttpStatusCode  c = (HttpStatusCode)code;

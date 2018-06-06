@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace VMD.RESTApiResponseWrapper.Net.Enums
 {
@@ -12,13 +7,13 @@ namespace VMD.RESTApiResponseWrapper.Net.Enums
         [Description("Request successful.")]
         Success,
         [Description("Request responded with exceptions.")]
-        Failure,
+        Exception,
         [Description("Request denied.")]
-        Information,
+        UnAuthorized,
         [Description("Request responded with validation error(s).")]
-        Warning,
+        ValidationError,
         [Description("Unable to process the request.")]
-        General
+        Failure
     }
 
 }
