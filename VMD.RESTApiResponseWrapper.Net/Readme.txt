@@ -4,7 +4,7 @@ The VMD.RESTApiResponseWrapper.Net is a global exception handler and response wr
 
 ## Prerequisite
 
-Install Newtonsog.Json package
+Install Newtonsoft.Json package
 
 ## Installing
 
